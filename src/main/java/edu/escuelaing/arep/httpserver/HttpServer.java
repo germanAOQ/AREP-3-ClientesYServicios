@@ -1,7 +1,12 @@
 package edu.escuelaing.arep.httpserver;
 
 import java.net.*;
+import java.nio.ByteBuffer;
 import java.util.Date;
+
+import javax.imageio.ImageIO;
+
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class HttpServer {
@@ -13,62 +18,63 @@ public class HttpServer {
 			System.err.println("Could not listen on port: 35000.");
 			System.exit(1);
 		}
-
-		boolean running = true;
-		while (running) {
+		while (true) {
 			Socket clientSocket = null;
 			try {
-				System.out.println("Listo para recibir ...");
+				System.out.println("Listo para recibir en el puerto " + getPort());
 				clientSocket = serverSocket.accept();
-			} catch (IOException e) {
+			} catch (IOException ioe) {
 				System.err.println("Accept failed.");
 				System.exit(1);
 			}
-			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			String inputLine = in.readLine();
-			String[] requestParam = inputLine.split(" ");
-			System.out.println(requestParam);
-			String path = requestParam[1].replace("/", "");
-			if(path.equals("")) path = "src/main/resources/public/index.html";
-					
-			File file = new File(path);
-			BufferedReader bfr = null;
-			
-			if(!file.exists() || !file.isFile()) {
-				System.out.println("writing not found...");
-	             out.write("HTTP/1.0 200 OK\r\n");
-	             out.write(new Date() + "\r\n");
-	             out.write("Content-Type: text/html");
-			}else {
-				FileReader fr = new FileReader(file);
-				bfr = new BufferedReader(fr);
-				String output = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n" + "\r\n" + "<!DOCTYPE html>\n";
-				String line;	
-				while((line = bfr.readLine()) != null) {
-					output = output+line+"\n";
-				}
-				out.println(output);
-			}
-			if(bfr!=null) bfr.close();
-			
-			/**
+			OutputStream outputStream = clientSocket.getOutputStream();
+			InputStream inputStream = clientSocket.getInputStream();
+			PrintWriter out = new PrintWriter(outputStream, true);
+			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+			String inputLine;
 			while ((inputLine = in.readLine()) != null) {
-				System.out.println("Recibí: " + inputLine);
-				if (!in.ready()) {
-					break;
+				int i = inputLine.indexOf('/') + 1;
+				String urlInputLine = "";
+				System.out.println("Received: " + inputLine);
+				if (inputLine.contains("index")) {
+					System.out.println("Impresion de prueba: "+inputLine);
+					while (!urlInputLine.endsWith(".html") && i < inputLine.length()) {
+						urlInputLine += (inputLine.charAt(i++));
+					}
+					String path = System.getProperty("user.dir") + "\\src\\" + "\\main\\" + "\\resources\\"
+							+ "\\public\\" + "index.html";
+					try {
+						BufferedReader readerFile = new BufferedReader(
+								new InputStreamReader(new FileInputStream(path), "UTF8"));
+						out.println("HTTP/2.0 200 OK");
+						out.println("Content-Type: text/html");
+						out.println("\r\n");
+						while (readerFile.ready()) {
+							out.println(readerFile.readLine());
+						}
+					} catch (FileNotFoundException e) {
+						// TODO: handle exception
+					}
+				} else if (inputLine.contains("jpg")) {
+					while (!urlInputLine.endsWith(".jpg") && i < inputLine.length()) {
+						urlInputLine += (inputLine.charAt(i++));
+					}
+					String path = System.getProperty("user.dir") + "\\src\\" + "\\main\\" + "\\resources\\"
+							+ "\\public\\" + urlInputLine;
+					BufferedImage bImage = ImageIO.read(new File(path));
+					out.println("HTTP/2.0 200 OK");
+					out.write("Content-Type: image/webp,*/*");
+					out.println("\r\n");
+					ImageIO.write(bImage, "jpg", outputStream);
 				}
+				if (!in.ready()) {
+                    break;
+                }
 			}
-			outputLine = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n" + "\r\n" + "<!DOCTYPE html>\n"
-					+ "<html>\n" + "<head>\n" + "<meta charset=\"UTF-8\">\n" + "<title>Title of the document</title>\n"
-					+ "</head>\n" + "<body>\n" + "<h1>Mi propio mensaje</h1>\n" + "</body>\n" + "</html>\n" + inputLine;
-			*/
-			//out.println(outputLine);
 			out.close();
 			in.close();
 			clientSocket.close();
 		}
-		serverSocket.close();
 	}
 
 	private static int getPort() {
