@@ -41,7 +41,7 @@ public class HttpServer {
 					while (!urlInputLine.endsWith(".html") && i < inputLine.length()) {
 						urlInputLine += (inputLine.charAt(i++));
 					}
-					String path = System.getProperty("user.dir") + "//index//" +urlInputLine;
+					String path = "index/"+urlInputLine;
 					try {
 						BufferedReader readerFile = new BufferedReader(
 								new InputStreamReader(new FileInputStream(path), "UTF8"));
@@ -58,7 +58,7 @@ public class HttpServer {
 					while (!urlInputLine.endsWith(".jpg") && i < inputLine.length()) {
 						urlInputLine += (inputLine.charAt(i++));
 					}
-					String path = System.getProperty("user.dir") +  "//index//" +urlInputLine;
+					String path = "index/"+urlInputLine;
 					BufferedImage bImage = ImageIO.read(new File(path));
 					out.println("HTTP/2.0 200 OK");
 					out.write("Content-Type: image/webp,*/*");
