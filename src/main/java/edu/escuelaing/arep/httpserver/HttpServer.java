@@ -26,8 +26,9 @@ public class HttpServer {
 			}
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			String inputLine = in.readLine(), outputLine;
+			String inputLine = in.readLine();
 			String[] requestParam = inputLine.split(" ");
+			System.out.println(requestParam);
 			String path = requestParam[1].replace("/", "");
 			if(path.equals("")) path = "src/main/resources/public/index.html";
 					
