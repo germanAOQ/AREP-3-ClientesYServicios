@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class HttpServer {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, FileNotFoundException {
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(getPort());
@@ -35,9 +35,7 @@ public class HttpServer {
 			while ((inputLine = in.readLine()) != null) {
 				int i = inputLine.indexOf('/') + 1;
 				String urlInputLine = "";
-				System.out.println("Received: " + inputLine);
 				if (inputLine.contains("index")) {
-					System.out.println("Impresion de prueba: "+inputLine);
 					while (!urlInputLine.endsWith(".html") && i < inputLine.length()) {
 						urlInputLine += (inputLine.charAt(i++));
 					}
@@ -46,14 +44,10 @@ public class HttpServer {
 						BufferedReader readerFile = new BufferedReader(
 								new InputStreamReader(new FileInputStream(path), "UTF8"));
 						String output;
-						output = "HTTP/1.1 200 OK\r\n"
-						        + "Content-Type: text/html\r\n"
-						         + "\r\n";
+						out.println("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n");
 						while (readerFile.ready()) {
-							output = output+readerFile.readLine()+"\n";
+							out.println(readerFile.readLine());
 						}
-						System.out.println(output);
-						out.println(output);
 					} catch (FileNotFoundException e) {
 						// TODO: handle exception
 					}
@@ -63,9 +57,9 @@ public class HttpServer {
 					}
 					String path = "src/main/resources/public/"+urlInputLine;
 					BufferedImage bImage = ImageIO.read(new File(path));
-					out.println("HTTP/1.1 200 OK\r\n");
-					out.write("Content-Type: image/webp,*/*\r\n");
-					out.println("\r\n");
+					out.println("HTTP/1.1 200 OK\r\nContent-Type: image/webp\r\n");
+					//out.write("Content-Type: image/webp,*/*");
+					//out.println("\r\n");
 					ImageIO.write(bImage, "jpg", outputStream);
 				}
 				if (!in.ready()) {
