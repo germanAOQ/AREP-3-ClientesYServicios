@@ -45,7 +45,7 @@ public class HttpServer {
 					try {
 						BufferedReader readerFile = new BufferedReader(
 								new InputStreamReader(new FileInputStream(path), "UTF8"));
-						out.println("HTTP/2.0 200 OK");
+						out.println("HTTP/1.1 200 OK");
 						out.println("Content-Type: text/html");
 						out.println("\r\n");
 						while (readerFile.ready()) {
@@ -60,7 +60,7 @@ public class HttpServer {
 					}
 					String path = "src/main/resources/public/"+urlInputLine;
 					BufferedImage bImage = ImageIO.read(new File(path));
-					out.println("HTTP/2.0 200 OK");
+					out.println("HTTP/1.1 200 OK");
 					out.write("Content-Type: image/webp,*/*");
 					out.println("\r\n");
 					ImageIO.write(bImage, "jpg", outputStream);
