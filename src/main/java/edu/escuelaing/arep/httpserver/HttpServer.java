@@ -32,9 +32,11 @@ public class HttpServer {
 			PrintWriter out = new PrintWriter(outputStream, true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
 			String inputLine;
+			out.println("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n");
 			while ((inputLine = in.readLine()) != null) {
 				int i = inputLine.indexOf('/') + 1;
 				String urlInputLine = "";
+				
 				if (inputLine.contains("index")) {
 					while (!urlInputLine.endsWith(".html") && i < inputLine.length()) {
 						urlInputLine += (inputLine.charAt(i++));
@@ -44,7 +46,6 @@ public class HttpServer {
 						BufferedReader readerFile = new BufferedReader(
 								new InputStreamReader(new FileInputStream(path), "UTF8"));
 						String output;
-						out.println("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n");
 						while (readerFile.ready()) {
 							out.println(readerFile.readLine());
 						}
@@ -60,7 +61,6 @@ public class HttpServer {
 					ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 					
 					BufferedImage bImage = ImageIO.read(new File(path));
-					out.println("HTTP/1.1 200 OK\r\nContent-Type: image/webp\r\n");
 					ImageIO.write(bImage, "jpg", byteArrayOutputStream);
 					
 					byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
