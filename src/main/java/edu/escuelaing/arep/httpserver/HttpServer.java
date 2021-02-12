@@ -45,12 +45,15 @@ public class HttpServer {
 					try {
 						BufferedReader readerFile = new BufferedReader(
 								new InputStreamReader(new FileInputStream(path), "UTF8"));
-						out.println("HTTP/1.1 200 OK\r\n");
-						out.println("Content-Type: text/html\r\n");
-						out.println("\r\n");
+						String output;
+						output = "HTTP/1.1 200 OK\r\n"
+						        + "Content-Type: text/html\r\n"
+						         + "\r\n";
 						while (readerFile.ready()) {
-							out.println(readerFile.readLine());
+							output = output+readerFile.readLine()+"\n";
 						}
+						System.out.println(output);
+						out.println(output);
 					} catch (FileNotFoundException e) {
 						// TODO: handle exception
 					}
@@ -61,7 +64,7 @@ public class HttpServer {
 					String path = "src/main/resources/public/"+urlInputLine;
 					BufferedImage bImage = ImageIO.read(new File(path));
 					out.println("HTTP/1.1 200 OK\r\n");
-					out.write("Content-Type: image/webp,*/*");
+					out.write("Content-Type: image/webp,*/*\r\n");
 					out.println("\r\n");
 					ImageIO.write(bImage, "jpg", outputStream);
 				}
