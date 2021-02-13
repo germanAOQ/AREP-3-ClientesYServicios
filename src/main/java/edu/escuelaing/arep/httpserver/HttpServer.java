@@ -58,18 +58,14 @@ public class HttpServer {
 					}
 					String path = "src/main/resources/public/"+urlInputLine;
 					
-					ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-					out.println("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n");
-					BufferedImage bImage = ImageIO.read(new File(path));
-					ImageIO.write(bImage, "jpg", byteArrayOutputStream);
-					
-					byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
-					outputStream.write(byteArrayOutputStream.toByteArray());
-					
-					
-					
-					//out.write("Content-Type: image/webp,*/*");
-					
+					BufferedImage bufferedImage = ImageIO.read(new File(path));
+					ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+					DataOutputStream dataImage = new DataOutputStream(outputStream);
+					ImageIO.write(bufferedImage,"jpg",bytes);
+					dataImage.writeBytes("HTTP/1.1 200 OK \r\n"
+		                    + "Content-Type: image/" + "jpg" + " \r\n"
+		                    + "\r\n");
+					outputStream.write(bytes.toByteArray());
 				}
 				if (!in.ready()) {
                     break;
