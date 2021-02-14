@@ -52,6 +52,7 @@ public class HttpServer {
 			String pathI = null;
 			String host = null;
 			while ((inputLine = in.readLine()) != null) {
+				System.out.println(inputLine);
 				if (isFirstLine) {
 					pathI = inputLine.split(" ")[1];
 					isFirstLine = false;
