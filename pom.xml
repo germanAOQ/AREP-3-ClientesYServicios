@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.2.18</version>
+			<version>42.2.5</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -45,6 +45,11 @@
 	<!-- build configuration -->
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>2.0.6</version>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>

@@ -33,7 +33,7 @@ java $JAVA_OPTS -cp target/classes:target/dependency/* edu.escuelaing.arep.https
 ```
 Una vez hecha la ejecución, se podrá acceder a la aplicación localmente através de la siguiente dirección:
 ```
-http://localhost:36000/index.html
+http://localhost:36000/
 ```
 Además, se podrá visualizar unicamente la imagen (javaLogo.jpg) accediendo a:
 ```
@@ -105,7 +105,7 @@ Finalmente, en la carpeta target quedará creado un archivo con el nombre **apid
 ## Construido con 
 * [Maven](https://maven.apache.org/) - Manejador de dependencias
 * [Git](https://github.com/) - Control de versionamiento
-* [Heroku](https://heroku.com) - Plataforma de despliegue [![Deploy](https://www.herokucdn.com/deploy/button.png)](http://nanosparkweb.herokuapp.com/index.html)
+* [Heroku](https://heroku.com) - Plataforma de despliegue [![Deploy](https://www.herokucdn.com/deploy/button.png)](http://nanosparkweb.herokuapp.com)
 * [Circle CI]() - Integración Continua ![Java CI with Maven](https://github.com/germanAOQ/AREP-3-ClientesYServicios/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 ## Autores 
