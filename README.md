@@ -61,8 +61,11 @@ Se presentan dos pruebas, una por cada reto:
 
 ### Reto 1:
 En el primer reto, una vez abierto el link, se ve lo siguiente en el cliente:
-![](images/Reto1_prueba_1.PNG)
-Si se oprime el botón, la imagen desaparecerá:
+
+![](images/Reto1_prueba_1.PNG)      
+
+Si se oprime el botón, la imagen desaparecerá: 
+
 ![](images/Reto1_prueba_2.PNG)
 ## Documentación
 
@@ -92,7 +95,7 @@ Finalmente, en la carpeta target quedará creado un archivo con el nombre **apid
 ## Construido con 
 * [Maven](https://maven.apache.org/) - Manejador de dependencias
 * [Git](https://github.com/) - Control de versionamiento
-* [Heroku](https://heroku.com) - Plataforma de despliegue [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://sparkwebapp.herokuapp.com/)
+* [Heroku](https://heroku.com) - Plataforma de despliegue [![Deploy](https://www.herokucdn.com/deploy/button.png)](http://nanosparkweb.herokuapp.com/index.html)
 * [Circle CI]() - Integración Continua [![CircleCI](https://circleci.com/gh/germanAOQ/AREP-2-IntroduccionHeroku.svg?style=svg)](https://circleci.com/gh/circleci/circleci-docs)
 
 ## Autores 

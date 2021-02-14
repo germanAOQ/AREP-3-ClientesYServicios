@@ -32,7 +32,7 @@ public class NanoSparkServer implements Processor{
 		funciones.put(ruta, bifunc);
 	}
 	
-	public void startServer() throws FileNotFoundException, IOException {
+	public void startServer() throws FileNotFoundException, IOException, InterruptedException {
 		//httpServer = new HttpServer();
 		httpServer.startServer(httpPort);
 		
@@ -53,6 +53,8 @@ public class NanoSparkServer implements Processor{
 		}
 		return value;
 	}
+	
+
 
 	private String validErrorHttpHeader() {
 		// TODO Auto-generated method stub

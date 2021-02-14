@@ -7,7 +7,7 @@ import edu.escuelaing.arep.httpserver.HttpServer;
 
 public class RunningServer {
 
-	public static void main(String[] args) throws FileNotFoundException, IOException {
+	public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
 		HttpServer httpServerFirstChallenge = new HttpServer();
 		httpServerFirstChallenge.startServer(HttpServer.getEnviorenmentPort());
 

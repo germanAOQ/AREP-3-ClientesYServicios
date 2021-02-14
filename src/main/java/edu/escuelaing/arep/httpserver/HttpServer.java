@@ -1,6 +1,9 @@
 package edu.escuelaing.arep.httpserver;
 
 import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +25,7 @@ public class HttpServer {
 
 	}
 
-	public void startServer(int httpPort) throws IOException, FileNotFoundException {
+	public void startServer(int httpPort) throws IOException, FileNotFoundException, InterruptedException {
 		this.setPort(httpPort);
 		ServerSocket serverSocket = null;
 		try {
@@ -47,10 +50,14 @@ public class HttpServer {
 			String inputLine;
 			boolean isFirstLine = true;
 			String pathI = null;
+			String host = null;
 			while ((inputLine = in.readLine()) != null) {
 				if (isFirstLine) {
 					pathI = inputLine.split(" ")[1];
 					isFirstLine = false;
+				}
+				if(inputLine.contains("Host")) {
+					host = inputLine.split(" ")[1];
 				}
 				int i = inputLine.indexOf('/') + 1;
 				String urlInputLine = "";
@@ -89,18 +96,21 @@ public class HttpServer {
 					break;
 				}
 			}
-			System.out.println();
 			String resp = null;
 			for(String key: routesToProcessors.keySet()) {
-				System.out.println(key);
-			}
-			
-			for(String key: routesToProcessors.keySet()) {
-				if(pathI.startsWith(key)) {
-					resp = routesToProcessors.get(key).handle(pathI.substring(key.length()),null, null);
+				if(pathI.contains(key) && !pathI.contains("?")) {
+					String link = "http://"+host+pathI;
+					HttpClient client = HttpClient.newHttpClient();
+					HttpRequest request = HttpRequest.newBuilder().uri(URI.create(link)).build();
+					resp = routesToProcessors.get(key).handle(pathI.substring(key.length()),request, null);
+				}else if(pathI.contains(key) && pathI.contains("?")) {
+					String link = "http://"+host+pathI;
+					HttpClient client = HttpClient.newHttpClient();
+					HttpRequest request = HttpRequest.newBuilder().uri(URI.create(link)).build();
+					resp = routesToProcessors.get(key).handle(pathI.substring(key.length(),pathI.indexOf("?")),request, null);
+
 				}
 			}
-			System.out.println(resp);
 			if(resp==null) {
 				out.println(validOkHttpResponse());
 			}else {

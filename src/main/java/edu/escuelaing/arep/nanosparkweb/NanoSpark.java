@@ -20,7 +20,7 @@ public class NanoSpark {
 		nServer.port(port);
 	}
 	
-	public static void start() throws FileNotFoundException, IOException {
+	public static void start() throws FileNotFoundException, IOException, InterruptedException {
 		NanoSparkServer nServer = NanoSparkServer.getInstance();
 		nServer.startServer();
 	}
