@@ -106,6 +106,7 @@ public class HttpServer {
 					HttpRequest request = HttpRequest.newBuilder().uri(URI.create(link)).build();
 					resp = routesToProcessors.get(key).handle(pathI.substring(key.length()),request, null);
 				}else if(pathI.contains(key) && pathI.contains("?")) {
+					System.out.println("He entrado aquí");
 					String link = "https://"+host+pathI;
 					HttpClient client = HttpClient.newHttpClient();
 					HttpRequest request = HttpRequest.newBuilder().uri(URI.create(link)).build();
