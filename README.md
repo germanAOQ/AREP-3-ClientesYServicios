@@ -67,6 +67,16 @@ En el primer reto, una vez abierto el link, se ve lo siguiente en el cliente:
 Si se oprime el botón, la imagen desaparecerá: 
 
 ![](images/Reto1_prueba_2.PNG)
+
+### Reto 2:                  
+En el segundo reto, escribiendo la siguiente URL localmente, con mensaje de query param que el usuario desee:
+```
+http://localhost:36000/Apps/helloworld?mensaje=[mensaje]
+```
+Se obtendra por parte del servidor la siguiente respuesta. Esta respuesta hace una consulta a la base de datos definida:
+
+![](images/Reto2_prueba_1.PNG) 
+
 ## Documentación
 
 ### Generar documentación
