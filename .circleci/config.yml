@@ -1,10 +1,73 @@
-version: 2.0
-
+version: 2
 jobs:
+  prebuild:
+    machine:
+      image: circleci/classic:201808-01
+    steps:
+      - checkout
+      - run:
+          name: Check java
+          command: |
+            set -xe
+            JAVA_VERSION=zulu11.31.11-ca-jdk11.0.3-linux_x64
+            docker login --username $DOCKERHUB_LOGIN --password $DOCKERHUB_PASSWORD
+            wget https://cdn.azul.com/zulu/bin/${JAVA_VERSION}.tar.gz \
+              -O /tmp/${JAVA_VERSION}.tar.gz
+            sudo tar -zxf /tmp/${JAVA_VERSION}.tar.gz -C /usr/lib/jvm
+            ls -l /usr/lib/jvm/
+            export JAVA_HOME="/usr/lib/jvm/${JAVA_VERSION}"
+            export PATH=/usr/lib/jvm/${JAVA_VERSION}/bin:$PATH
+            
+            java -version
   build:
     docker:
-      - image: circleci/openjdk:stretch
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    
+      # specify the version you desire here
+      - image: circleci/openjdk:11-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - setup_remote_docker
+      - run: gradle dependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      - run:
+          name: Check java
+          command: |
+              set -xe
+              docker login --username $DOCKERHUB_LOGIN --password $DOCKERHUB_PASSWORD
+              ls -la
+              java -version
+      # run tests!
+      #- run: gradle test
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - prebuild
+      - build:
+          requires:
+            - prebuild
