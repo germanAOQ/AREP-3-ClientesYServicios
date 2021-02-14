@@ -97,6 +97,7 @@ public class HttpServer {
 					break;
 				}
 			}
+			System.out.println(pathI);
 			String resp = null;
 			for(String key: routesToProcessors.keySet()) {
 				if(pathI.contains(key) && !pathI.contains("?")) {
