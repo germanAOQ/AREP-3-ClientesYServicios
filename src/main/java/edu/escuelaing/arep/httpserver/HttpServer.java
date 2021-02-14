@@ -49,6 +49,7 @@ public class HttpServer {
 			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
 			String inputLine;
 			boolean isFirstLine = true;
+			boolean isFirstResquest = true;
 			String pathI = null;
 			String host = null;
 			while ((inputLine = in.readLine()) != null) {
@@ -63,11 +64,12 @@ public class HttpServer {
 				int i = inputLine.indexOf('/') + 1;
 				String urlInputLine = "";
 
-				if (inputLine.contains("index")) {
+				if ((inputLine.contains("index") || pathI.equals("/")) && isFirstResquest) {
+					isFirstResquest = false;
 					while (!urlInputLine.endsWith(".html") && i < inputLine.length()) {
 						urlInputLine += (inputLine.charAt(i++));
 					}
-					String path = "src/main/resources/public/" + urlInputLine;
+					String path = "src/main/resources/public/" + "index.html";
 					try {
 						BufferedReader readerFile = new BufferedReader(
 								new InputStreamReader(new FileInputStream(path), "UTF8"));
