@@ -99,12 +99,12 @@ public class HttpServer {
 			String resp = null;
 			for(String key: routesToProcessors.keySet()) {
 				if(pathI.contains(key) && !pathI.contains("?")) {
-					String link = "http://"+host+pathI;
+					String link = "https://"+host+pathI;
 					HttpClient client = HttpClient.newHttpClient();
 					HttpRequest request = HttpRequest.newBuilder().uri(URI.create(link)).build();
 					resp = routesToProcessors.get(key).handle(pathI.substring(key.length()),request, null);
 				}else if(pathI.contains(key) && pathI.contains("?")) {
-					String link = "http://"+host+pathI;
+					String link = "https://"+host+pathI;
 					HttpClient client = HttpClient.newHttpClient();
 					HttpRequest request = HttpRequest.newBuilder().uri(URI.create(link)).build();
 					resp = routesToProcessors.get(key).handle(pathI.substring(key.length(),pathI.indexOf("?")),request, null);
