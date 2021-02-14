@@ -1,73 +1,29 @@
-version: 2
+version: 2.1
+
+# Define the jobs we want to run for this project
 jobs:
-  prebuild:
-    machine:
-      image: circleci/classic:201808-01
-    steps:
-      - checkout
-      - run:
-          name: Check java
-          command: |
-            set -xe
-            JAVA_VERSION=zulu11.31.11-ca-jdk11.0.3-linux_x64
-            docker login --username $DOCKERHUB_LOGIN --password $DOCKERHUB_PASSWORD
-            wget https://cdn.azul.com/zulu/bin/${JAVA_VERSION}.tar.gz \
-              -O /tmp/${JAVA_VERSION}.tar.gz
-            sudo tar -zxf /tmp/${JAVA_VERSION}.tar.gz -C /usr/lib/jvm
-            ls -l /usr/lib/jvm/
-            export JAVA_HOME="/usr/lib/jvm/${JAVA_VERSION}"
-            export PATH=/usr/lib/jvm/${JAVA_VERSION}/bin:$PATH
-            
-            java -version
   build:
     docker:
-      # specify the version you desire here
-      - image: circleci/openjdk:11-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
-
+      - image: circleci/<language>:<version TAG>
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
+      - run: echo "this is the build job"
+  test:
+    docker:
+      - image: circleci/<language>:<version TAG>
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      - run: echo "this is the test job"
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - setup_remote_docker
-      - run: gradle dependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-
-      - run:
-          name: Check java
-          command: |
-              set -xe
-              docker login --username $DOCKERHUB_LOGIN --password $DOCKERHUB_PASSWORD
-              ls -la
-              java -version
-      # run tests!
-      #- run: gradle test
-
+# Orchestrate our job run sequence
 workflows:
-  version: 2
-  build-test-and-deploy:
+  build_and_test:
     jobs:
-      - prebuild
-      - build:
-          requires:
-            - prebuild
+      - build
+      - test
