@@ -105,14 +105,14 @@ public class HttpServer {
 			for(String key: routesToProcessors.keySet()) {
 				if(pathI.contains(key) && !pathI.contains("?")) {
 					isNanoSpark = true;
-					String link = "https://"+host+pathI;
+					String link = "http://"+host+pathI;
 					HttpClient client = HttpClient.newHttpClient();
 					HttpRequest request = HttpRequest.newBuilder().uri(URI.create(link)).build();
 					resp = routesToProcessors.get(key).handle(pathI.substring(key.length()),request, null);
 				}else if(pathI.contains(key) && pathI.contains("?")) {
 					isNanoSpark = true;
 					System.out.println("He entrado aquí");
-					String link = "https://"+host+pathI;
+					String link = "http://"+host+pathI;
 					HttpClient client = HttpClient.newHttpClient();
 					HttpRequest request = HttpRequest.newBuilder().uri(URI.create(link)).build();
 					resp = routesToProcessors.get(key).handle(pathI.substring(key.length(),pathI.indexOf("?")),request, null);
