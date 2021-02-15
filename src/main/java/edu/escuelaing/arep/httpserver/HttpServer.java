@@ -17,6 +17,10 @@ import edu.escuelaing.arep.nanosparkweb.Processor;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+/**
+ * @author German
+ *
+ */
 public class HttpServer {
 	private int port;
 	private Map<String, Processor> routesToProcessors = new HashMap();
@@ -25,6 +29,12 @@ public class HttpServer {
 
 	}
 
+	/**
+	 * @param httpPort puerto con el que inicia el servidor
+	 * @throws IOException 
+	 * @throws FileNotFoundException
+	 * @throws InterruptedException
+	 */
 	public void startServer(int httpPort) throws IOException, FileNotFoundException, InterruptedException {
 		this.setPort(httpPort);
 		ServerSocket serverSocket = null;
@@ -133,6 +143,9 @@ public class HttpServer {
 		}
 	}
 
+	/**
+	 * @return el puerto por defecto que define la infraestructura.
+	 */
 	public static Integer getEnviorenmentPort() {
 		if (System.getenv("PORT") != null) {
 			return Integer.parseInt(System.getenv("PORT"));
@@ -140,6 +153,9 @@ public class HttpServer {
 		return 36000;
 	}
 
+	/**
+	 * @return una cadena con una respuesta http.
+	 */
 	public String validOkHttpResponse() {
 		return "HTTP/1.1 200 OK\r\n"
 		        + "Content-Type: text/html\r\n"
@@ -156,14 +172,24 @@ public class HttpServer {
 		         + "</html>\n";
 	}
 	
+	/**
+	 * @param port
+	 */
 	public void setPort(int port) {
 		this.port = port;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getPort() {
 		return port;
 	}
 
+	/**
+	 * @param path path a ser registrado 
+	 * @param proc 
+	 */
 	public void registerProcessor(String path, Processor proc) {
 		routesToProcessors.put(path, proc);
 	}

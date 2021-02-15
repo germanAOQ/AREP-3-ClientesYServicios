@@ -12,6 +12,9 @@ public class Persistence {
 	private static final String password = "dbf55124f4de8f399bf67f892832573717d130a18e8893269ab4f21c12776850";
 	
 	
+	/**
+	 * @return retorna la conexión a la base de datos.
+	 */
 	public Connection connection() {
 		Connection conn = null;
         try {
@@ -25,6 +28,11 @@ public class Persistence {
        
 	}
 	
+	/**
+	 * @param conexion parametro asociado a la conexión con la base de datos.
+	 * @param name cadena que será concatenada junto con la respuesta del servidor de la base datos.
+	 * @return retorna cadena que concatena la respuesta de la base de datos con name. 
+	 */
 	public String getStatement(Connection conexion, String name) {
 		Statement statement;
 		ResultSet rs;

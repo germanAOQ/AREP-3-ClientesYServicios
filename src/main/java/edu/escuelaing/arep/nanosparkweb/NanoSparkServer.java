@@ -19,25 +19,43 @@ public class NanoSparkServer implements Processor{
 	
 	private static NanoSparkServer _instance = new NanoSparkServer();
 	
+	/**
+	 * 
+	 */
 	private NanoSparkServer() {
 		httpServer = new HttpServer();
 		httpServer.registerProcessor("/Apps",this);
 	}
 
+	/**
+	 * @return returna la única instancia de la clase.
+	 */
 	public static NanoSparkServer getInstance() {
 		return _instance;
 	}
 	
+	/**
+	 * @param ruta ruta a ser mapeada.
+	 * @param bifunc función lambda a ser resgistrada.
+	 */ 
 	public void mapRouteBody(String ruta, BiFunction<HttpRequest, HttpResponse, String> bifunc) {
 		funciones.put(ruta, bifunc);
 	}
 	
+	/**
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public void startServer() throws FileNotFoundException, IOException, InterruptedException {
 		//httpServer = new HttpServer();
 		httpServer.startServer(httpPort);
 		
 	}
 
+	/**
+	 * @param servetPort puerto a ser asignado.
+	 */
 	public void port(int servetPort) {
 		this.httpPort = servetPort;
 		
@@ -56,6 +74,9 @@ public class NanoSparkServer implements Processor{
 	
 
 
+	/**
+	 * @return retorna un http header de error.
+	 */
 	private String validErrorHttpHeader() {
 		// TODO Auto-generated method stub
 		return "HTTP/1.1 404 Not Found OK\r\n"
@@ -73,6 +94,9 @@ public class NanoSparkServer implements Processor{
         + "</html>\n";
 	}
 
+	/**
+	 * @return retorna un http header.
+	 */
 	private String validOkHttpHeader() {
 		return "HTTP/1.1 200 OK\r\n"
 				+ "Content-Type: text/html\r\n"
