@@ -13,7 +13,7 @@ public class Persistence {
 	
 	
 	public Connection connection() {
-		/** Connection conn = null;
+		Connection conn = null;
         try {
             conn = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to the PostgreSQL server successfully.");
@@ -22,18 +22,7 @@ public class Persistence {
         }
 
         return conn;
-        */
-        Connection c = null;
-        try {
-           Class.forName("org.postgresql.Driver");
-           c = DriverManager.getConnection(url,
-              user, password);
-        } catch (Exception e) {
-           e.printStackTrace();
-           System.err.println(e.getClass().getName()+": "+e.getMessage());
-           System.exit(0);
-        }
-        return c;
+       
 	}
 	
 	public String getStatement(Connection conexion, String name) {
